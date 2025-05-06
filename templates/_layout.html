@@ -1,4 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}E-Commerce Website{% endblock %}</title>
+        <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <header class="p-3 mb-3 border-bottom">
+            <div class="container d-flex align-items-center justify-content-between">
+                <div class="brand-container">
+                    <a class="navbar-brand fs-3 fw-bold" href="#">ShopEasy</a>
+                </div>
+                <nav class="navbar navbar-expand-lg w-100">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="btn btn-primary me-2" href="/cart">Cart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary" href="/login">Login</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <main class="container">
+            {% block content %}
+            <!-- Page-specific content will go here -->
+            {% endblock %}
+        </main>
+        <footer class="text-center py-2 border-top fixed-bottom">
+            <p class="mb-0">&copy; 2025 ShopEasy. All rights reserved.</p>
+        </footer>
+        <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    </body>
 </html>
