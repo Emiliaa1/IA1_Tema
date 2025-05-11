@@ -1,44 +1,87 @@
 {% extends "_layout.html" %}
 
-{% block title %}Home - ShopEasy{% endblock %}
+{% block title %}Home - Maison Verdite{% endblock %}
 
 {% block content %}
-<div class="text-center my-5">
-    <h1>Welcome to ShopEasy</h1>
-    <p class="lead">Your one-stop shop for all your needs!</p>
-    <a href="/products" class="btn btn-primary btn-lg">Shop Now</a>
+<style>
+  .hero-section {
+    background: url("{{ url_for('static', filename='images/myimage.jpeg') }}") center/cover no-repeat;
+    height: 80vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%); 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-overlay {
+    background: rgba(78, 86, 60, 0.7);
+    padding: 5rem;
+    border-radius: 2rem;
+  }
+
+  .intro-text {
+    padding: 4rem 2rem;
+    background-color: #94A07C;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%); 
+    text-align: center;
+  }
+
+  .product-card img {
+    height: 500px;
+    object-fit:contain;
+  }
+
+  .product-card .card-body {
+    text-align: center;
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-overlay">
+    <h1 class="display-4 fw-bold">Wear the Story of Sustainable Elegance</h1>
+    <p class="lead">Earth-kind fabrics. Artisan-led design. Garments built to last.</p>
+    <a href="/products" class="btn btn-light btn-lg mt-3">Explore the Collection</a>
+  </div>
+</section>
+
+<!-- Intro Text -->
+<div class="intro-text">
+  <h2>Maison Verdite - Crafting Tomorrow’s Classics</h2>
+  <p class="lead">We’re redefining fashion with organic materials, ethical sourcing, and timeless design. Join us in making a conscious choice for the planet—without compromising on style.</p>
 </div>
 
-<div class="row">
+<!-- Products Section -->
+<div class="container py-5">
+  <div class="row g-4">
+    {% for product in products %}
     <div class="col-md-4">
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/product1.jpg') }}" class="card-img-top" alt="Product 1">
-            <div class="card-body">
-                <h5 class="card-title">Product 1</h5>
-                <p class="card-text">$19.99</p>
-                <a href="/product/1" class="btn btn-outline-primary">View Details</a>
-            </div>
+      <div class="card product-card">
+        <img src="{{ url_for('static', filename=product.image) }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">${{ product.price }}</p>
+          <a href="/product/{{ product.id }}" class="btn btn-outline-success">View Details</a>
+          <button class="btn btn-primary" onclick="addToCart('{{ product.id }}')">Add to Cart</button>
         </div>
+      </div>
     </div>
-    <div class="col-md-4">
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/product2.jpg') }}" class="card-img-top" alt="Product 2">
-            <div class="card-body">
-                <h5 class="card-title">Product 2</h5>
-                <p class="card-text">$29.99</p>
-                <a href="/product/2" class="btn btn-outline-primary">View Details</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <img src="{{ url_for('static', filename='images/product3.jpg') }}" class="card-img-top" alt="Product 3">
-            <div class="card-body">
-                <h5 class="card-title">Product 3</h5>
-                <p class="card-text">$39.99</p>
-                <a href="/product/3" class="btn btn-outline-primary">View Details</a>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
+  </div>
 </div>
+
+<script>
+  function addToCart(productId) {
+    fetch(`/cart/add/${productId}`, { method: 'POST' })
+      .then(response => response.json())
+      .then(data => alert(data.message))
+      .catch(error => console.error('Error:', error));
+  }
+</script>
 {% endblock %}
