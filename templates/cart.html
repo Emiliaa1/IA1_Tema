@@ -1,11 +1,46 @@
 {% extends "_layout.html" %}
 
-{% block title %}Cart - EcoWear{% endblock %}
+{% block title %}Cart - Maison Verdite{% endblock %}
 
 {% block content %}
 <div class="container my-5">
-    <h1>Your Cart</h1>
-    <p class="lead">You currently have no items in your cart.</p>
-    <a href="/products" class="btn btn-primary">Continue Shopping</a>
+  <h1>Your Cart</h1>
+  {% if cart %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product_id, item in cart.items() %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>${{ item.price }}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <a href="/cart/decrease-item?id={{ product_id }}" class="btn btn-outline-secondary btn-sm me-2">-</a>
+            <span>{{ item.count }}</span>
+            <a href="/cart/add-item?id={{ product_id }}" class="btn btn-outline-secondary btn-sm ms-2">+</a>
+          </div>
+        </td>
+        <td>${{ item.price * item.count }}</td>
+        <td>
+          <a href="/cart/remove-item?id={{ product_id }}" class="btn btn-danger btn-sm">Remove</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <h3>Total: ${{ total_price }}</h3>
+  <a href="/checkout" class="btn btn-success">Proceed to Checkout</a>
+  {% else %}
+  <p class="lead">Your cart is empty.</p>
+  <a href="/" class="btn btn-primary">Continue Shopping</a>
+  {% endif %}
 </div>
 {% endblock %}

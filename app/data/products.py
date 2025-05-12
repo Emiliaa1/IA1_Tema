@@ -21,17 +21,17 @@ products = [
         "description": "Stylish jeans crafted with sustainable practices."
     },
     {
-        "id": 2,
+        "id": 4,
         "name": "Recycled Hoodie",
         "price": 49.99,
-        "image": "images/product2.jpg",
+        "image": "images/Jacket1.png",
         "description": "A cozy hoodie made from recycled materials."
     },
     {
-        "id": 3,
-        "name": "Eco-Friendly Jeans",
+        "id": 5,
+        "name": "Recycled Cotton Shirt",
         "price": 69.99,
-        "image": "images/product3.jpg",
+        "image": "images/Shirt1.png",
         "description": "Stylish jeans crafted with sustainable practices."
     }
 ]

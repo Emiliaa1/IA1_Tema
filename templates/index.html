@@ -5,7 +5,7 @@
 {% block content %}
 <style>
   .hero-section {
-    background: url("{{ url_for('static', filename='images/myimage.jpeg') }}") center/cover no-repeat;
+    background: url("{{ url_for('static', filename='images/hero.jpg') }}") center/cover no-repeat;
     height: 80vh;
     color: white;
     display: flex;
@@ -14,12 +14,16 @@
     text-align: center;
     position: relative;
     width: 100vw;
-    margin-left: calc(-50vw + 50%); 
+    margin-left: calc(-50vw + 50%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
 
+  .shadow-text {
+    text-shadow: black 0 0 15px;
+  }
+
   .hero-overlay {
-    background: rgba(78, 86, 60, 0.7);
+    background: rgba(44, 44, 43, 0.0);
     padding: 5rem;
     border-radius: 2rem;
   }
@@ -28,16 +32,7 @@
     padding: 4rem 2rem;
     background-color: #94A07C;
     width: 100vw;
-    margin-left: calc(-50vw + 50%); 
-    text-align: center;
-  }
-
-  .product-card img {
-    height: 500px;
-    object-fit:contain;
-  }
-
-  .product-card .card-body {
+    margin-left: calc(-50vw + 50%);
     text-align: center;
   }
 </style>
@@ -45,8 +40,8 @@
 <!-- Hero Section -->
 <section class="hero-section">
   <div class="hero-overlay">
-    <h1 class="display-4 fw-bold">Wear the Story of Sustainable Elegance</h1>
-    <p class="lead">Earth-kind fabrics. Artisan-led design. Garments built to last.</p>
+    <h1 class="display-4 fw-bold shadow-text">Wear the Story of Sustainable Elegance</h1>
+    <p class="lead shadow-text">Earth-kind fabrics. Artisan-led design. Garments built to last.</p>
     <a href="/products" class="btn btn-light btn-lg mt-3">Explore the Collection</a>
   </div>
 </section>
@@ -67,21 +62,12 @@
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">${{ product.price }}</p>
-          <a href="/product/{{ product.id }}" class="btn btn-outline-success">View Details</a>
-          <button class="btn btn-primary" onclick="addToCart('{{ product.id }}')">Add to Cart</button>
+          <p class="card-text">${{ product.description }}</p>
+          <a href="/cart/add-item?id={{ product.id }}" class="btn btn-outline-primary">Add to Cart</a>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
 </div>
-
-<script>
-  function addToCart(productId) {
-    fetch(`/cart/add/${productId}`, { method: 'POST' })
-      .then(response => response.json())
-      .then(data => alert(data.message))
-      .catch(error => console.error('Error:', error));
-  }
-</script>
 {% endblock %}

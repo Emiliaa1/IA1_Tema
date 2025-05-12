@@ -7,7 +7,7 @@ body {
     flex-direction: column;
     font-family:Georgia, 'Times New Roman', Times, serif;
     font-size: 1.2rem;
-    background-color: #f9f9f9;
+    background-color: #f8f3eb;
     color: #333;
 }
 
@@ -51,11 +51,12 @@ header {
 
 .btn-outline-primary {
     border-color: #666e55;
-    color: #94A07C;
+    color: #4d533f;
 }
 
 .btn-outline-primary:hover {
     background-color: #94A07C;
+    border-color: #666e55;
     color: #ffffff;
 }
 
@@ -67,3 +68,15 @@ footer {
     padding: 2rem 0;
     color: #777;
 }
+
+.product-card img {
+    height: 300px;
+    width: 100%;
+    object-fit: contain;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .product-card .card-body {
+    text-align: center;
+  }
