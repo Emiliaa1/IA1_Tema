@@ -69,14 +69,45 @@ footer {
     color: #777;
 }
 
+/* Product Card Styles */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Ensure all cards have the same height */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
 .product-card img {
     height: 300px;
     width: 100%;
     object-fit: contain;
     background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  }
+}
 
-  .product-card .card-body {
+.product-card .card-body {
+    flex-grow: 1; /* Ensures the card body stretches to fill available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     text-align: center;
-  }
+    padding: 1rem;
+}
+
+.product-card .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.product-card .card-text {
+    flex-grow: 1; /* Ensures the description takes up available space */
+    margin-bottom: 1rem;
+}
+
+.product-card .btn {
+    margin-top: auto; /* Push the button to the bottom of the card */
+}

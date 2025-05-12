@@ -1,46 +1,129 @@
 {% extends "_layout.html" %}
 
-{% block title %}Cart - Maison Verdite{% endblock %}
+{% block title %}Cart – Maison Verdite{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-  <h1>Your Cart</h1>
-  {% if cart %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Total</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for product_id, item in cart.items() %}
-      <tr>
-        <td>{{ item.name }}</td>
-        <td>${{ item.price }}</td>
-        <td>
-          <div class="d-flex align-items-center">
-            <a href="/cart/decrease-item?id={{ product_id }}" class="btn btn-outline-secondary btn-sm me-2">-</a>
-            <span>{{ item.count }}</span>
-            <a href="/cart/add-item?id={{ product_id }}" class="btn btn-outline-secondary btn-sm ms-2">+</a>
+<style>
+  .cart-wrapper {
+    background-color: #dad0c2; /* beige */
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1200px;
+    height: 70vh;
+    margin: 0 auto;
+  }
+  .cart-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .cart-items {
+    flex: 2;
+    max-height: 500px;
+    overflow-y: auto;
+    min-width: 300px;
+  }
+  .summary-card {
+    flex: none;
+    width: 300px;
+    height: 500px;
+    background-color: #fff; /* dark blue */
+    color: #2b3618;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  .summary-card .card-header {
+    background-color: #556B2F; /* dark olive */
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+  }
+  .summary-body {
+    flex-grow: 1;
+    margin-top: 15px;
+  }
+  .btn-olive {
+    background-color: #808000;
+    color: #fff;
+    border: none;
+  }
+  .btn-olive:hover {
+    background-color: #6B8E23;
+  }
+  .empty-cart {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .empty-cart img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+</style>
+
+<div class="cart-wrapper my-5">
+  <h2 class="text-center mb-4" style="color: #556B2F;">Your Cart</h2>
+  <div class="cart-content">
+    <!-- LEFT: Items -->
+    <div class="cart-items list-group mb-4">
+      {% if cart %}
+        {% for pid, item in cart.items() %}
+        <div class="list-group-item d-flex align-items-center">
+          <img src="{{ url_for('static', filename=item.image) }}"
+               alt="{{ item.name }}"
+               class="img-thumbnail me-3"
+               style="width: 80px; height:auto; border: 2px solid #808000;">
+          <div class="flex-grow-1">
+            <h5 class="mb-1" style="color: #556B2F;">{{ item.name }}</h5>
+            <div class="d-flex align-items-center mb-2">
+              <a href="{{ url_for('cart.decrease_item') }}?id={{ pid }}"
+                 class="btn btn-outline-secondary btn-sm me-2">–</a>
+              <span>{{ item.count }}</span>
+              <a href="{{ url_for('cart.add_to_cart_from_cart') }}?id={{ pid }}"
+                 class="btn btn-outline-secondary btn-sm ms-2">+</a>
+            </div>
+            <p class="mb-0">Unit price: ${{ '%.2f' % item.price }}</p>
+            <p class="mb-0">Line total: ${{ '%.2f' % (item.price * item.count) }}</p>
           </div>
-        </td>
-        <td>${{ item.price * item.count }}</td>
-        <td>
-          <a href="/cart/remove-item?id={{ product_id }}" class="btn btn-danger btn-sm">Remove</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <h3>Total: ${{ total_price }}</h3>
-  <a href="/checkout" class="btn btn-success">Proceed to Checkout</a>
-  {% else %}
-  <p class="lead">Your cart is empty.</p>
-  <a href="/" class="btn btn-primary">Continue Shopping</a>
-  {% endif %}
+          <a href="{{ url_for('cart.remove_from_cart') }}?id={{ pid }}"
+             class="btn btn-danger btn-sm ms-3">Remove</a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-cart">
+        <img src="{{ url_for('static', filename='images/empty-cart.png') }}" alt="Empty Cart">
+          <p class="lead">Your cart is empty.</p>
+          <a href="{{ url_for('index.index_page') }}" class="btn btn-olive mt-3">Continue Shopping</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: Summary -->
+    {% if cart %}
+    <div class="summary-card">
+      <div class="card-header">
+        <h4 class="mb-0">Order Summary</h4>
+      </div>
+      <div class="summary-body">
+        {% set subtotal = total_price %}
+        {% set taxes = subtotal * 0.10 %}
+        {% set total = subtotal + taxes %}
+        <p>Subtotal:<br><strong>${{ '%.2f' % subtotal }}</strong></p>
+        <p class="mt-2">Tax (10%):<br><strong>${{ '%.2f' % taxes }}</strong></p>
+        <hr style="border-color: #394235;">
+        <h5 class="mt-2">Grand Total:<br>${{ '%.2f' % total }}</h5>
+      </div>
+      <a href="{{ url_for('checkout.checkout_page') }}"
+         class="btn btn-olive w-100">
+        Go to Checkout
+      </a>
+    </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

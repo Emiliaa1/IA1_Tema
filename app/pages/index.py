@@ -31,7 +31,8 @@ def add_to_cart():
         cart[pid] = {
             "name":  product["name"],
             "price": product["price"],
-            "count": 1
+            "count": 1,
+            "image": product["image"]
         }
 
     session["cart"] = cart
