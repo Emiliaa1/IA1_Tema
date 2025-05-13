@@ -4,6 +4,8 @@ from .pages.index import index_pages
 from .pages.cart import cart_pages
 from .pages.login import login_pages
 from .pages.checkout import checkout_pages
+from .pages.contact import contact_pages
+from .pages.products_flask import products_pages
 
 # Initialize the Flask application
 # Note: static folder means all files in there will be automatically offered over HTTP
@@ -15,3 +17,5 @@ app.register_blueprint(index_pages)
 app.register_blueprint(cart_pages)
 app.register_blueprint(login_pages)
 app.register_blueprint(checkout_pages)
+app.register_blueprint(contact_pages)
+app.register_blueprint(products_pages)

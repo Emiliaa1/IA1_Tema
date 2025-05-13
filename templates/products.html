@@ -1,0 +1,52 @@
+{% extends "_layout.html" %}
+
+{% block title %}Products – Maison Verdite{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center mb-4" style="color: #556B2F;">Our Products</h2>
+
+  <!-- Filter and Sort Options -->
+  <form method="GET" action="{{ url_for('products.products_page') }}" class="mb-4">
+    <div class="row">
+      <div class="col-md-4">
+        <label for="category" class="form-label">Filter by Category</label>
+        <select class="form-select" id="category" name="category">
+          <option value="">All Categories</option>
+          {% for category in categories %}
+          <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="sort" class="form-label">Sort by</label>
+        <select class="form-select" id="sort" name="sort">
+          <option value="name" {% if sort == 'name' %}selected{% endif %}>Name</option>
+          <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+          <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+        </select>
+      </div>
+      <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-success w-100">Apply</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Products Grid -->
+  <div class="row g-4">
+    {% for product in products %}
+    <div class="col-md-4">
+      <div class="card product-card">
+        <img src="{{ url_for('static', filename=product.image) }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">${{ '%.2f' % product.price }}</p>
+          <p class="card-text">{{ product.description }}</p>
+          <a href="/cart/add-item?id={{ product.id }}" class="btn btn-primary">Add to Cart</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

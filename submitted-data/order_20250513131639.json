@@ -1,0 +1,25 @@
+{
+    "full_name": "a",
+    "email": "blabla@yahoo.com",
+    "phone": "rewgtrewgtr",
+    "address": "tewgtewgw",
+    "payment_method": "cash",
+    "cart": {
+        "2": {
+            "count": 1,
+            "image": "images/Sweater1.png",
+            "name": "Recycled Sweatshirt",
+            "price": 49.99
+        },
+        "4": {
+            "count": 1,
+            "image": "images/Jacket1.png",
+            "name": "Recycled Hoodie",
+            "price": 49.99
+        }
+    },
+    "subtotal": 99.98,
+    "taxes": 9.998000000000001,
+    "total_price": 109.97800000000001,
+    "timestamp": "2025-05-13 13:16:39"
+}

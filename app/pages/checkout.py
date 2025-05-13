@@ -1,7 +1,50 @@
-import os
-import json
+import sqlite3
+import threading
+
+# ensure thread-safety with Flask’s threaded server
+_db_lock = threading.Lock()
+DB_PATH = "siteia1_simple.db"
+
+def init_db():
+    with _db_lock:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        # orders: one row per checkout
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS orders (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name    TEXT NOT NULL,
+            email        TEXT NOT NULL,
+            phone        TEXT NOT NULL,
+            address      TEXT NOT NULL,
+            payment_method TEXT NOT NULL,
+            subtotal     REAL NOT NULL,
+            taxes        REAL NOT NULL,
+            total_price  REAL NOT NULL,
+            timestamp    TEXT NOT NULL
+        )
+        """)
+        # order_items: one row per product line
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS order_items (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id   INTEGER NOT NULL,
+            product_id INTEGER NOT NULL,
+            name       TEXT NOT NULL,
+            price      REAL NOT NULL,
+            quantity   INTEGER NOT NULL,
+            FOREIGN KEY(order_id) REFERENCES orders(id)
+        )
+        """)
+        conn.commit()
+        conn.close()
+
+# Initialize on import
+init_db()
+
 from datetime import datetime
-from flask import Blueprint, render_template, session, redirect, url_for, request
+import pprint
+from flask import Blueprint, render_template, session, redirect, url_for, request, flash
 
 checkout_pages = Blueprint("checkout", __name__)
 
@@ -11,41 +54,92 @@ def checkout_page():
     if not cart:
         return redirect(url_for("cart.cart_page"))
 
-    # Compute subtotal and total price (including tax)
-    subtotal = sum(item["price"] * item["count"] for item in cart.values())
-    tax_rate = 0.10  # 10% tax
-    taxes = subtotal * tax_rate
+    # pricing
+    subtotal    = sum(item["price"] * item["count"] for item in cart.values())
+    tax_rate    = 0.10
+    taxes       = subtotal * tax_rate
     total_price = subtotal + taxes
 
     if request.method == "POST":
-        # Collect form data
-        order_data = {
-            "full_name": request.form.get("full_name"),
-            "email": request.form.get("email"),
-            "phone": request.form.get("phone"),
-            "address": request.form.get("address"),
-            "payment_method": request.form.get("payment_method"),
-            "cart": cart,
-            "subtotal": subtotal,
-            "taxes": taxes,
-            "total_price": total_price,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # 1) Prepare a human-readable dump for console
+        order_info = {
+            "full_name":      request.form.get("full_name", ""),
+            "email":          request.form.get("email", ""),
+            "phone":          request.form.get("phone", ""),
+            "address":        request.form.get("address", ""),
+            "payment_method": request.form.get("payment_method", ""),
+            "subtotal":       subtotal,
+            "taxes":          taxes,
+            "total_price":    total_price,
+            "timestamp":      datetime.utcnow().isoformat(),
+            "cart_items": [
+                {
+                    "product_id": int(pid),
+                    "name":        item["name"],
+                    "unit_price":  item["price"],
+                    "quantity":    item["count"],
+                    "line_total":  item["price"] * item["count"]
+                }
+                for pid, item in cart.items()
+            ]
         }
+        pprint.pprint(order_info)
 
-        # Print order data to the console
-        print(json.dumps(order_data, indent=4))
+        # 2) Persist to SQLite
+        with _db_lock:
+            conn = sqlite3.connect(DB_PATH)
+            c = conn.cursor()
 
-        # Save order data to a file
-        os.makedirs("submitted-data", exist_ok=True)
-        order_file = f"submitted-data/order_{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
-        with open(order_file, "w") as f:
-            json.dump(order_data, f, indent=4)
+            # insert into orders
+            c.execute("""
+              INSERT INTO orders
+                (full_name, email, phone, address, payment_method,
+                 subtotal, taxes, total_price, timestamp)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+              order_info["full_name"],
+              order_info["email"],
+              order_info["phone"],
+              order_info["address"],
+              order_info["payment_method"],
+              order_info["subtotal"],
+              order_info["taxes"],
+              order_info["total_price"],
+              order_info["timestamp"]
+            ))
+            order_id = c.lastrowid
 
-        # Clear the cart and redirect to success page
+            # insert each line item
+            for item in order_info["cart_items"]:
+                c.execute("""
+                  INSERT INTO order_items
+                    (order_id, product_id, name, price, quantity)
+                  VALUES (?, ?, ?, ?, ?)
+                """, (
+                  order_id,
+                  item["product_id"],
+                  item["name"],
+                  item["unit_price"],
+                  item["quantity"]
+                ))
+
+            conn.commit()
+            conn.close()
+
+        # 3) Clear cart and redirect
         session.pop("cart", None)
+        flash("Thank you! Your order has been placed.", "success")
         return redirect(url_for("checkout.checkout_success"))
 
-    return render_template("checkout.html", cart=cart, subtotal=subtotal, taxes=taxes, total_price=total_price)
+    # GET: render form
+    return render_template(
+        "checkout.html",
+        cart        = cart,
+        subtotal    = subtotal,
+        taxes       = taxes,
+        total_price = total_price
+    )
+
 
 @checkout_pages.route("/checkout/success")
 def checkout_success():
