@@ -9,6 +9,11 @@ def cart_page():
     total_price = sum(item["price"] * item["count"] for item in cart.values())
     return render_template("cart.html", cart=cart, total_price=total_price)
 
+@cart_pages.route("/cart/empty", methods=["GET"])
+def empty_cart():
+    session.pop("cart", None)  # Clear the cart from the session
+    return redirect(url_for("cart.cart_page"))
+
 @cart_pages.route("/cart/remove-item", methods=["GET"])
 def remove_from_cart():
     pid = request.args.get("id")

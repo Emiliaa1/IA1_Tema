@@ -4,60 +4,118 @@
 
 {% block content %}
 <style>
-    .container h2 {
-    color: #556B2F;
-    font-weight: bold;
-    }
-
-    .list-inline-item img {
-    transition: transform 0.2s ease;
-    }
-
-    .list-inline-item img:hover {
-    transform: scale(1.2);
-    }
-
-    iframe {
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+  .container { font-family: 'Montserrat', sans-serif; }
+  .hero {
+    position: relative;
+    background: url("{{ url_for('static', filename='images/contact.jpg') }}") center/cover no-repeat;
+    color: #fff;
+    padding: 80px 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+    z-index: 1;
+  }
+  .hero h2, .hero p {
+    position: relative;
+    z-index: 2; /* Ensure text is above the overlay */
+  }
+  .hero h2 { font-weight: 700; font-size: 2.75rem; margin-bottom: 10px; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); }
+  .hero p { font-weight: 500; font-size: 1.6rem; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
+  .info-card, .map-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    padding: 30px;
+    margin-bottom: 30px;
+    background-color: #fff;
+  }
+  .info-card h4, .map-card h4 {
+    color: #556b2f;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+  }
+  .contact-list li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    color: #333;
+    font-size: 1rem;
+  }
+  .contact-list li i {
+    font-size: 1.3rem;
+    width: 30px;
+    color: #556b2f;
+    margin-right: 10px;
+  }
+  .social-icons a {
+    display: inline-block;
+    margin-right: 15px;
+    transition: transform 0.2s ease;
+    color: #556b2f;
+    font-size: 1.5rem;
+  }
+  .social-icons a:hover { transform: translateY(-4px); }
+  iframe {
+    width: 100%;
+    height: 320px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
 </style>
+
 <div class="container my-5">
-  <h2 class="text-center mb-4" style="color: #556B2F;">Contact Us</h2>
+  <!-- Hero Section -->
+  <div class="hero">
+    <h2>Reach Out to Us</h2>
+    <p>Your voice matters. Whether it’s a question, feedback, or collaboration, we’re here and ready to connect.</p>
+  </div>
+
   <div class="row">
-    <!-- Contact Information -->
+    <!-- Contact Information Card -->
     <div class="col-md-6">
-      <h4>Our Information</h4>
-      <p><strong>Address:</strong> 123 Eco Street, Green City, Earth</p>
-      <p><strong>Email:</strong> <a href="mailto:info@maisonverdite.com">info@maisonverdite.com</a></p>
-      <p><strong>Phone:</strong> +1 (555) 123-4567</p>
-      <p><strong>Working Hours:</strong> Mon - Fri: 9:00 AM - 6:00 PM</p>
-      <p><strong>Follow Us:</strong></p>
-      <ul class="list-inline">
-        <li class="list-inline-item">
-          <a href="https://facebook.com" target="_blank" class="text-decoration-none">
-            <img src="{{ url_for('static', filename='images/facebook-icon.png') }}" alt="Facebook" style="width: 24px;">
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a href="https://twitter.com" target="_blank" class="text-decoration-none">
-            <img src="{{ url_for('static', filename='images/twitter-icon.png') }}" alt="Twitter" style="width: 24px;">
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a href="https://instagram.com" target="_blank" class="text-decoration-none">
-            <img src="{{ url_for('static', filename='images/instagram-icon.png') }}" alt="Instagram" style="width: 24px;">
-          </a>
-        </li>
-      </ul>
+      <div class="card info-card">
+        <div class="card-body">
+          <h4>Contact Details</h4>
+          <ul class="list-unstyled contact-list">
+            <li><i class="fas fa-map-marker-alt"></i>123 Eco Street, Green City, Earth</li>
+            <li><i class="fas fa-envelope"></i><a href="mailto:info@maisonverdite.com"> info@maisonverdite.com</a></li>
+            <li><i class="fas fa-phone-alt"></i>+1 (555) 123-4567</li>
+            <li><i class="far fa-clock"></i>Mon - Fri: 9:00 AM - 6:00 PM</li>
+          </ul>
+          <div class="social-icons mt-3">
+            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Map Section -->
     <div class="col-md-6">
-      <h4>Find Us on the Map</h4>
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509374!2d-122.4194154846813!3d37.77492927975954!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064f0e2b1b1%3A0x4a0b6e8b8b8b8b8b!2s123%20Eco%20Street%2C%20Green%20City%2C%20Earth!5e0!3m2!1sen!2sus!4v1610000000000!5m2!1sen!2sus"
-        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      <div class="card map-card">
+        <div class="card-body">
+          <h4>Our Location</h4>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509374!2d-122.4194154846813!3d37.77492927975954!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064f0e2b1b1%3A0x4a0b6e8b8b8b8b8b!2s123%20Eco%20Street%2C%20Green%20City%2C%20Earth!5e0!3m2!1sen!2sus!4v1610000000000!5m2!1sen!2sus"
+            allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
     </div>
   </div>
 </div>

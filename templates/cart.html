@@ -65,10 +65,13 @@
     height: auto;
     margin-top: 20px;
   }
-  .continue-shopping {
+  .button-group {
     position: absolute;
     bottom: 20px;
     left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between buttons */
   }
 </style>
 
@@ -133,10 +136,15 @@
   </div>
 
   {% if cart %}
-  <!-- Continue Shopping Button -->
-  <a href="{{ url_for('index.index_page') }}" class="btn btn-outline-secondary continue-shopping">
-    Continue Shopping
-  </a>
+  <!-- Button Group -->
+  <div class="button-group">
+    <a href="{{ url_for('products.products_page') }}" class="btn btn-outline-secondary">
+      Continue Shopping
+    </a>
+    <a href="{{ url_for('cart.empty_cart') }}" class="btn btn-outline-danger">
+      Empty Cart
+    </a>
+  </div>
   {% endif %}
 </div>
 {% endblock %}
