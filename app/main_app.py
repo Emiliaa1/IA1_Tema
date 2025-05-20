@@ -17,3 +17,10 @@ app.register_blueprint(cart_pages)
 app.register_blueprint(checkout_pages)
 app.register_blueprint(contact_pages)
 app.register_blueprint(products_pages)
+
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response

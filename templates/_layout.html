@@ -31,7 +31,12 @@
                         </ul>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary me-2" href="/cart">Cart</a>
+                                <a class="btn btn-outline-primary me-2" href="/cart">
+                                    Cart
+                                    {% if session.get('cart') %}
+                                        ({{ session['cart'].values()|map(attribute='count')|sum }})
+                                    {% endif %}
+                                </a>
                             </li>
                         </ul>
                     </div>
