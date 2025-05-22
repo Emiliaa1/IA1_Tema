@@ -6,18 +6,19 @@
         <title>{% block title %}Sustainable Clothing Shop{% endblock %}</title>
         <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     </head>
     <body>
+        <!-- Navigation code -->
         <header class="p-3 mb-3 border-bottom">
             <div class="container-fluid d-flex align-items-center justify-content-between">
+                <!-- Logo -->
                 <a class="navbar-brand" href="/">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EcoWear Logo" style="height: 5rem;">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Maison Verdite Logo" style="height: 5rem;">
                 </a>
                 <nav class="navbar navbar-expand-lg w-100">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
                     <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+                        <!-- Left part of navbar: home, products, contact -->
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="/">Home</a>
@@ -29,8 +30,10 @@
                                 <a class="nav-link" href="/contact">Contact</a>
                             </li>
                         </ul>
+                        <!-- Left part of navbar: cart -->
                         <ul class="navbar-nav">
                             <li class="nav-item">
+                                <!-- if there are items in the cart also display the number of items -->
                                 <a class="btn btn-outline-primary me-2" href="/cart">
                                     Cart
                                     {% if session.get('cart') %}
@@ -48,9 +51,9 @@
             <!-- Page-specific content will go here -->
             {% endblock %}
         </main>
+        <!-- Simple footer-->
         <footer class="text-center py-10 border-top">
             <p class="mb-0">&copy; 2025 Maison Verdite. All rights reserved.</p>
         </footer>
-        <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     </body>
 </html>

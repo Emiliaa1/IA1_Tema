@@ -14,6 +14,7 @@ def empty_cart():
     session.pop("cart", None)  # Clear the cart from the session
     return redirect(url_for("cart.cart_page"))
 
+# Remove item from cart
 @cart_pages.route("/cart/remove-item", methods=["GET"])
 def remove_from_cart():
     pid = request.args.get("id")
@@ -23,6 +24,7 @@ def remove_from_cart():
         session["cart"] = cart
     return redirect(url_for("cart.cart_page"))
 
+# Decrement item count in cart
 @cart_pages.route("/cart/decrease-item", methods=["GET"])
 def decrease_item():
     pid = request.args.get("id")

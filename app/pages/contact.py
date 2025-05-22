@@ -4,5 +4,5 @@ contact_pages = Blueprint("contact", __name__)
 
 @contact_pages.route("/contact")
 def contact_page():
-    # Front page listing products
+    # Display contact page
     return render_template("contact.html")

@@ -1,4 +1,4 @@
-# Imported symbols here please!
+# Imported symbols
 from flask import Flask, request, render_template, redirect, session
 from .pages.index import index_pages
 from .pages.cart import cart_pages
@@ -7,7 +7,6 @@ from .pages.contact import contact_pages
 from .pages.products_flask import products_pages
 
 # Initialize the Flask application
-# Note: static folder means all files in there will be automatically offered over HTTP
 app = Flask(__name__, static_folder="../public",
             template_folder="../templates")
 app.secret_key = "gxnMaYjinQ27DeBwgKsDyuDQO"
@@ -18,6 +17,7 @@ app.register_blueprint(checkout_pages)
 app.register_blueprint(contact_pages)
 app.register_blueprint(products_pages)
 
+# Make browser not cache the pages for cart functionality
 @app.after_request
 def add_header(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"

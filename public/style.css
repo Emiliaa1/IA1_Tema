@@ -89,7 +89,7 @@ footer {
 }
 
 .product-card .card-body {
-    flex-grow: 1; /* Ensures the card body stretches to fill available space */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -104,10 +104,10 @@ footer {
 }
 
 .product-card .card-text {
-    flex-grow: 1; /* Ensures the description takes up available space */
+    flex-grow: 1; 
     margin-bottom: 1rem;
 }
 
 .product-card .btn {
-    margin-top: auto; /* Push the button to the bottom of the card */
+    margin-top: auto; 
 }

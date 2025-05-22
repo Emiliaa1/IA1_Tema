@@ -1,10 +1,11 @@
 import sqlite3
 import threading
 
-# ensure thread-safety with Flask’s threaded server
+# ensure thread-safety
 _db_lock = threading.Lock()
 DB_PATH = "siteia1_simple.db"
 
+# initialize SQLite database
 def init_db():
     with _db_lock:
         conn = sqlite3.connect(DB_PATH)
@@ -61,7 +62,7 @@ def checkout_page():
     total_price = subtotal + taxes
 
     if request.method == "POST":
-        # 1) Prepare a human-readable dump for console
+        # Prepare a human-readable dump for console
         order_info = {
             "full_name":      request.form.get("full_name", ""),
             "email":          request.form.get("email", ""),
@@ -85,7 +86,7 @@ def checkout_page():
         }
         pprint.pprint(order_info)
 
-        # 2) Persist to SQLite
+        # Persist to SQLite
         with _db_lock:
             conn = sqlite3.connect(DB_PATH)
             c = conn.cursor()
@@ -126,7 +127,7 @@ def checkout_page():
             conn.commit()
             conn.close()
 
-        # 3) Clear cart and redirect
+        # Clear cart and redirect
         session.pop("cart", None)
         flash("Thank you! Your order has been placed.", "success")
         return redirect(url_for("checkout.checkout_success"))
@@ -140,7 +141,7 @@ def checkout_page():
         total_price = total_price
     )
 
-
+# redirect to success page
 @checkout_pages.route("/checkout/success")
 def checkout_success():
     return render_template("checkout_success.html")

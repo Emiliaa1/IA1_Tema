@@ -5,7 +5,7 @@
 {% block content %}
 <style>
   .cart-wrapper {
-    background-color: #dad0c2; /* beige */
+    background-color: #dad0c2;
     padding: 20px;
     border-radius: 8px;
     max-width: 1200px;
@@ -28,7 +28,7 @@
     flex: none;
     width: 300px;
     height: 500px;
-    background-color: #fff; /* dark blue */
+    background-color: #fff;
     color: #2b3618;
     border-radius: 8px;
     display: flex;
@@ -71,7 +71,7 @@
     left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Add spacing between buttons */
+    gap: 10px; 
   }
 </style>
 
@@ -82,12 +82,15 @@
     <div class="cart-items list-group mb-4">
       {% if cart %}
         {% for pid, item in cart.items() %}
+        <!-- Item cards -->
         <div class="list-group-item d-flex align-items-center">
+          <!-- Products image -->
           <img src="{{ url_for('static', filename=item.image) }}"
                alt="{{ item.name }}"
                class="img-thumbnail me-3"
                style="width: 80px; height:auto; border: 2px solid #808000;">
           <div class="flex-grow-1">
+            <!-- Product information-->
             <h5 class="mb-1" style="color: #556B2F;">{{ item.name }}</h5>
             <div class="d-flex align-items-center mb-2">
               <a href="{{ url_for('cart.decrease_item') }}?id={{ pid }}"
@@ -104,6 +107,7 @@
         </div>
         {% endfor %}
       {% else %}
+        <!-- Empty cart -->
         <div class="empty-cart">
         <img src="{{ url_for('static', filename='images/empty-cart.png') }}" alt="Empty Cart">
           <p class="lead">Your cart is empty.</p>
@@ -119,6 +123,7 @@
         <h4 class="mb-0">Order Summary</h4>
       </div>
       <div class="summary-body">
+        <!-- Compute total -->
         {% set subtotal = total_price %}
         {% set taxes = subtotal * 0.10 %}
         {% set total = subtotal + taxes %}
